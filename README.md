@@ -12,14 +12,14 @@ In this tutorial, you will learn to:
 
 Learn about the fundamentals of blockchain and Open Liberty by following the [Integrate Java microservices with blockchain using Hyperledger Fabric and Open Liberty](https://developer.ibm.com/tutorials/integrate-java-microservices-with-blockchain-using-hyperledger-fabric-and-open-liberty/) to experience starting a 1 Org blockchain network and an Open Liberty server to execute transactions to blockchain. Also, follow this to follow the instructions on installing the IBM Blockchain platform VS Code extension.
 
-You will be able to use a fully distributed 2 Org blockchain network. Leveraging a distributed network and Open Liberty to submit transactions and listen to events.
+You will use a fully distributed 2 Org blockchain network. Leveraging a distributed network and Open Liberty to submit transactions and listen to events.
 
 Using blockchain provides supply chains a permanent record of transactions which are grouped in blocks that cannot be altered, creating an alternative to traditional paper tracking and manual inspection systems, which can leave supply chains vulnerable to inaccuracies and fraud.
 
-In our example we are creating a decentralized blockchain network using a buyer and a seller in a supply chain for car sales, based on the fabcar sample.
+In our example we are creating a distributed blockchain network using a buyer and a seller in a supply chain for car sales, based on the fabcar sample.
 
 The seller (Org 1) can add a car to the blockchain network, which will emit an event notifying other organisations an event has occured on the blockchain.
-A buyer (Org 2) can become notified that a new car has been added to the blockchain network. The buyer will be able to see the new car which is up for sale. If the buyer is looking for a new car, they can query the new car which has been added to the blockchain network. 
+The buyer (Org 2) becomes notified that a new car has been added to the blockchain network. The buyer will be notified through Open Liberty and see the new car which is up for sale, with a transaction ID. If the buyer is looking for a new car,they can query the car which has been added to the blockchain network. 
 
 ## Architecture flow
 
@@ -60,6 +60,15 @@ A buyer (Org 2) can become notified that a new car has been added to the blockch
 * Finished
 
 
+## 1. Get the development tools
+
+1. If you have not already, download and [Install Visual Studio Code.]((https://code.visualstudio.com/download) )
+
+1.  Install the [IBM Blockchain Platform extension for VS Code.](https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform)
+
+    After installation, if any additional prerequisites are needed, the extension will guide you through installing them. Make sure you pick up the Docker prerequisites, as they will be used to create your Fabric network.
+
+1. Install the [Open Liberty Tools for VS Code.](https://marketplace.visualstudio.com/items?itemName=Open-Liberty.liberty-dev-vscode-ext)
 
 ## 1. Import the Open Liberty projects into VS Code
 
@@ -179,4 +188,133 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
       <img src="images/export-org1.png" alt="drawing">
 
    1. Save the folder as `wallet` in the `/Users/Shared/FabConnection/` directory.
+
+
+## 6. Start Org 1 and Org 2 Open Liberty Servers
+
+1. You will have two VS Code widows open. As we installed the Dev Tool for Open Liberty, click the Liberty Dev Dashboard icon, and the extension will display the project: org-1-ol-blockchain.
+
+1. Right-click org1-ol-blockchain, and select Start.
+
+    This will quickly start up the application server up — usually within 2 – 5 seconds.
+
+    Org1 is now running on port 9080.
+
+1. Navigate to the other VS Code window,click the Liberty Dev Dashboard icon, and the extension will display the project: org-2-ol-blockchain.
+
+    Right-click org2-ol-blockchain, and select Start.
+
+    Org2 is now running on port 9081.
+
+## 7. Add a car to the ledger
+
+As there are two organisations, we are going to test create a transaction from the seller and view the updated ledger for the buyer
+
+From a seller persepective, add a car to the ledger. 
+
+1. Navigate to `http://localhost:9080/openapi/ui`
+
+
+1. Navigate to **POST /System/Resources/Car Add a car to the ledger**.
+
+1. Click **Try it out**.
+
+1. Fill in the example schema with the following values, as illustrated in the figure:
+
+   ```
+   {
+     "make": "VW",
+     "model": "Golf",
+     "colour": "White",
+     "owner": "Tom Jennings"
+     "key": "CAR20"
+   }
+   ```
+
+## 8. Query all Ledger state as a buyer
+
+As an interested party who is on the blockchain, such as national car dealers, may be interested in buying a used car. For example a 21 year old boy may want to buy a VW Golf.
+
+1. Navigate to the buyer on `http://localhost:9081/openapi/ui`
+
+    In reality, the blockchain network will be deployed on the IBM Cloud Blockchain Platform, with the Java microservices deployed to Kubernetes, whereby multiple clients will be on different systems nationally. 
+
+1. Navigate to **GET /System/Resources/Cars Returns all cars > Try it out > Execute**.
+
+It will send a request to the Ledger and return back all cars.
+
+The successful response should look like
+
+```
+Queried all Cars Successfully.
+Cars:
+[{"make":"VW","model":"Golf","colour":"White","owner":"Tom"}}]
+```
+
+## 9. Events out of Hyperledger Fabric
+
+Hyperledger Fabric has the event logic preconfigured. When a transaction is submitted the event logic is triggered, however the client is not always listening to events. 
+
+The diagram illustrates how Open Liberty is listening to events from Hyperledger Fabric locally. 
+
+ <img src="images/events-diagram.png" alt="drawing">
+
+    1. The buyer submits a transaction through as a REST request. The car is processed by the Java microserivce, and adds it to the blockchian network. The car can be queried by any organsiation, as demonstrated in step 7.
+
+    2. When the transaction is processed, an event is emitted out of Hyperledger Fabric. Organisation One however is not configured to listen to the events as the Seller is not interested in listening to events of the car that has just been added. 
+
+    3. For Organisation two, the same event is emmited, however the Open Liberty is configured to listen to the events, resulting in the event apprearing.
+
+    4. Organisation two can manually ask for the recent events that are emitted out of Hyperledger Fabric, through the OpenAPI User Interface. This manually executes the methods to retrieve the events of the cars being added.
+
+    5. Organisation two however can automatically get updates of the events emitted out of Hyperledger Fabric. The methods surrounding eventing are automatically executing, resulting in Open Liberty constanstly listening for new events out of Hyperledger Fabric. The web browser is refreshing every three seconds so the the buyer is always recieving automatic updates of cars that are added to the Ledger.
+
+1.  Navigate to `http://localhost:9080/openapi/ui` 
+
+    To add a car to the ledger
+
+    ![](images/gifs/cargif.gif)
+
+1. Navigate to **POST /System/Resources/Car Add a car to the ledger**.
+
+    Fill in the example Schema
+
+    ```
+    {
+     "make": "Range Rover",
+     "model": "Sport",
+     "colour": "Gunmetal Grey",
+     "owner": "David J",
+      "key": "CAR20"
+    }
+    ```
+
+
+
+1.  Navigate to `http://localhost:9081/openapi/ui` 
+
+    An event has been triggered out of Hyperledger Fabric
+
+
+1. Navigate to **GET /System/Resources/TransactionId Returns transactionId data**.
+
+    View the contents of the recently added car. This is the manual way of listening to the events, as shown in step 4 of the diagram. 
+
+    ![](images/gifs/viewtransactiondata.gif)
+
+    Fill out the example schema with your own cars and see the updated car.
+ 
+1. Navigate to **GET /System/Resources/Events Returns events**.
+
+    ![](images/gifs/transactionid.gif)
+
+    Every transaction submitted to Hyperledger Fabric has a unique transaction id. When pressing execute, it returns the unique transactionid data.
+
+    The transactionid is unique every time an event is emitted.
+
+### Listen to Events automatically from Hyperledger Fabric
+ 
+
+
+    
 
