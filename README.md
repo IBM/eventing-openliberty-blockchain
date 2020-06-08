@@ -335,7 +335,7 @@ There are two ways Organization two can receive the events:
 
 Open another tab on the web browser of your choice and experience the event-based driven architecture of listening to events 
 
-1. Navigate to **http://localhost:9081/ol-blockchain/servlet**
+1. Navigate to http://localhost:9081/ol-blockchain/servlet
 
     The Servlet is on Org2 listening to events automatically out of Hyperledger Fabric. This is done through a [servlet.](https://openliberty.io/guides/maven-intro.html#creating-the-project-pom-file)  
 
