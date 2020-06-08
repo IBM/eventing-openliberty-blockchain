@@ -1,4 +1,4 @@
-<server description="Intro REST Guide Liberty server">
+<server description="Org1 blockchain server">
   <!-- tag::featureManager[] -->
   <featureManager>
       <feature>jaxrs-2.1</feature>
