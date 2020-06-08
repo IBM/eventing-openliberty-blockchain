@@ -28,7 +28,26 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
 ## Architecture flow
 
- <img src="images/ArchitectDiagram.jpg" alt="drawing">
+ <img src="images/ArchitectDiagram.png" alt="drawing">
+ 
+1. The developer develops a smart contract using Java (Preconfigured FabCar sample)
+ 
+2. Use the IBM Blockchain Platform Extension for VS Code to package the Decentralized FabCar smart contract.
+
+3. Setup and launch the IBM Blockchain Platform 2.0 service
+
+4. The IBM Blockchain Platform 2.0 enables the creation of a network in Docker containers locally enabling installation and instantiation of the FabCar smart contract on the network for 2 organisations
+
+5. Organisation 1, the seller, adds a new car to the distributed ledger available for sale using the Open Liberty Org1 RESTful Webservice and the Fabric SDK.
+
+6. The Open Liberty application for Organisation 2, the Buyer, uses the Fabric SDK to listener to specific transactions and subsequently interact with the deployed network on IBM Blockchain Platform 2.0.
+
+7. The added car on the ledger automatically creates and emits a Transaction (Commit) Event; the listener receives the event for the Buyer.  
+
+8. The buyer is interested in the new car and then queries the car from the distributed ledger.
+ 
+
+
 
 ## Prerequisites:
 
@@ -119,7 +138,7 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
 1. Within **FABRIC ENVIRONMENTS**, select the ` + ` icon to create a customized blockchain network.
 
-1. Select `Create  new from template`, using a template blockchain network structure created by IBM Blockchain platform team
+1. Select `Create  new from template`, using a template blockchain network structure created by IBM Blockchain platform team.
 
 1. As we are creating a **2 Org network** select **2 Org template (2CAs, 2 peers, 1 channel)**
 
