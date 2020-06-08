@@ -15,8 +15,8 @@ Learn about the fundamentals of blockchain and Open Liberty by following the [In
 
 * Use the IBM Blockchain Platform extension to create a fully distributed 2 Org local blockchain network and deploy a sample smart contract Fabcar
 * Use the [Open Liberty](https://openliberty.io)   extension to start two Java microservices that can communicate with blockchain
-* Transact on the blockchain network from a sellers Java microservice to sell cars. 
-* Listen for events emitted out of Hyperledger fabric on the buyers' Java microservice. 
+* Transact on the blockchain network from a sellers Java microservice to sell cars
+* Listen for events emitted out of Hyperledger fabric on the buyers' Java microservice
 
 You will use a fully distributed 2 Org blockchain network. Leveraging a distributed network and Open Liberty to submit transactions and listen to events.
 
@@ -325,7 +325,6 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
     Every transaction submitted to Hyperledger Fabric has a unique transaction id. When pressing execute, it returns the unique transactionid data.
 
-    The transactionid is unique every time an event is emitted.
 
 ### Listen to Events automatically from Hyperledger Fabric
 
