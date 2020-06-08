@@ -283,13 +283,9 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
 3. For Organisation two, the event triggered by Organization One has the configuration to listen to the events, resulting in the organization receiving the event.
 
-4. Organisation two can manually ask for the recent events that are emitted out of Hyperledger Fabric, through the OpenAPI User Interface. This manually executes the methods to retrieve the events of the cars being added.
+4. Organisation two can ask for the recent events emitted out of Hyperledger Fabric, through the OpenAPI User Interface. This executes the methods to retrieve the events of the cars being added.
 
-There are two ways Organization two can receive the events:
-
-1. Manually ask for the recent events from Hyperledger Fabric, through the OpenAPI User Interface,  executing methods to retrieve the events of the cars being added.
-
-2. There is also an event-driven architecture within Organization two whereby the org can automatically get updates of the events emitted out of Hyperledger Fabric through a servlet.
+5. There is also an event-driven architecture within Organization two whereby the org can automatically get updates of the events emitted out of Hyperledger Fabric through a servlet.
 
 ### Submit a new transaction
 
@@ -375,8 +371,7 @@ It is the same in supply chain networks, all parties agree of adding a block to 
 
 1. Click **Try it out**
 
-1. Fill in the example Schema
-
+1. Fill in the example Schema:
 
 ```
 {
@@ -420,7 +415,7 @@ Now, the servers is off and the application is not running anymore. If you tried
 
 *Optional*: You can stop the blockchain network, and save the state on the ledger if you decide to come back to it later. Click on the IBM Blockchain Platform icon on the left side. On Fabric Environments, click **...** > **Stop Fabric Environment**. 
 
-1. You can easily start it again by clicking `1 Org Local Fabric`. 
+1. You can easily start it again by clicking `2 Org Local Fabric`. 
 
 To remove the Docker images where it is running, on Fabric Environments click **...** > **Teardown Fabric Environment**.
 
