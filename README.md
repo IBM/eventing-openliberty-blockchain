@@ -70,7 +70,7 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
 1. Install the [Open Liberty Tools for VS Code.](https://marketplace.visualstudio.com/items?itemName=Open-Liberty.liberty-dev-vscode-ext)
 
-## 1. Import the Open Liberty projects into VS Code
+## 2. Import the Open Liberty projects into VS Code
 
 1. Add the Org1 project to VS Code, select **File** > **Open** > **eventing/org1**, and then click **Open**.
 
@@ -80,7 +80,7 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
     Adding the Org2 project is what makes the blockchain network dectralized as it will add multiple organizations. Open the `Liberty Dev Dashboard` to view the `org2-ol-blockchain`.
 
-## 2. Import the FabCar sample smart contract project into VS Code
+## 3. Import the FabCar sample smart contract project into VS Code
 
 1. Click the IBM Blockchain Platform icon in the top right corner (looks like a square).
 
@@ -108,7 +108,7 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
 1. Click the IBM Blockchain Platform icon on the left side to navigate back to the IBM Blockchain Platform extension for VS Code.
 
-## 4. Start the 2 Org blockchain network and deploy the contract
+## 4. Start a 2 Org blockchain network and deploy the contract
 
 1. Within **FABRIC ENVIRONMENTS**, select the ` + ` icon to create a customized blockchain network.
 
@@ -231,7 +231,7 @@ From a seller persepective, add a car to the ledger.
    }
    ```
 
-## 8. Query all Ledger state as a buyer
+## 8. Query all ledger state as a buyer
 
 As an interested party who is on the blockchain, such as national car dealers, may be interested in buying a used car. For example a 21 year old boy may want to buy a VW Golf.
 
@@ -259,15 +259,15 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
  <img src="images/events-diagram.png" alt="drawing">
 
-    1. The buyer submits a transaction through as a REST request. The car is processed by the Java microserivce, and adds it to the blockchian network. The car can be queried by any organsiation, as demonstrated in step 7.
+1. The buyer submits a transaction through as a REST request. The car is processed by the Java microserivce, and adds it to the blockchian network. The car can be queried by any organsiation, as demonstrated in step 7.
 
-    2. When the transaction is processed, an event is emitted out of Hyperledger Fabric. Organisation One however is not configured to listen to the events as the Seller is not interested in listening to events of the car that has just been added. 
+2. When the transaction is processed, an event is emitted out of Hyperledger Fabric. Organisation One however is not configured to listen to the events as the Seller is not interested in listening to events of the car that has just been added. 
 
-    3. For Organisation two, the same event is emmited, however the Open Liberty is configured to listen to the events, resulting in the event apprearing.
+3. For Organisation two, the same event is emmited, however the Open Liberty is configured to listen to the events, resulting in the event apprearing.
 
-    4. Organisation two can manually ask for the recent events that are emitted out of Hyperledger Fabric, through the OpenAPI User Interface. This manually executes the methods to retrieve the events of the cars being added.
+4. Organisation two can manually ask for the recent events that are emitted out of Hyperledger Fabric, through the OpenAPI User Interface. This manually executes the methods to retrieve the events of the cars being added.
 
-    5. Organisation two however can automatically get updates of the events emitted out of Hyperledger Fabric. The methods surrounding eventing are automatically executing, resulting in Open Liberty constanstly listening for new events out of Hyperledger Fabric. The web browser is refreshing every three seconds so the the buyer is always recieving automatic updates of cars that are added to the Ledger.
+5. Organisation two however can automatically get updates of the events emitted out of Hyperledger Fabric. The methods surrounding eventing are automatically executing, resulting in Open Liberty constanstly listening for new events out of Hyperledger Fabric. The web browser is refreshing every three seconds so the the buyer is always recieving automatic updates of cars that are added to the Ledger.
 
 1.  Navigate to `http://localhost:9080/openapi/ui` 
 
@@ -302,7 +302,7 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
     ![](images/gifs/viewtransactiondata.gif)
 
-    Fill out the example schema with your own cars and see the updated car.
+    Fill out the example schema with your own cars and see the event.
  
 1. Navigate to **GET /System/Resources/Events Returns events**.
 
@@ -313,8 +313,80 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
     The transactionid is unique every time an event is emitted.
 
 ### Listen to Events automatically from Hyperledger Fabric
- 
+
+Open another tab on the web browser of your choice
+
+1. Navigate to **http://localhost:9081/ol-blockchain/servlet**
+
+    The Servlet is on Org2 listening to events automatically out of Hyperledger Fabric. This is done through a [servlet.](https://openliberty.io/guides/maven-intro.html#creating-the-project-pom-file)  
+
+    ![](images/gifs/transaction-event.gif)
+
+1. Navigate to Org1 and add a car to the ledger **Post /System/Resources/Car Add a car to the ledger.**
+
+1. Click **Try it out.**
+
+1. Fill in the example schema with the following values, as illustrated in the figure:
+
+```
+ {
+  "make": "Ford",
+  "model": "Fiesta",
+  "colour": "Blue",
+  "owner": "Hannah J",
+  "key": "CAR23"
+}
+```
+
+The event appears successfully on the buyers window, showing the latest transaction that has been added to the ledger.
+
+Try it out by adding more cars to the ledger. 
+
+## 10. Update the owner of the car
+
+The buyer on Org2 may decide they want to buy the car from the seller. 
+
+In bitcoin, there is the concept of 'bitcoin miners'. The miners do three main jobs; issuance of new bitcoins, security and confirming transactions. A transaction can only be added to the blockchain once it has been verified by the miners. The more miners that agree that the transaction is legitamate, the better it is for larger payments. In return miners get paid.
+
+This is a classic example of all parties agreeing to adding a block to the chain, moving the virtual money to the ownership of someone else.
+
+It is the same in supply chain networks, all parties agree of adding a block to the chain. In hyperledger fabric these are called Smart Contracts. 
+
+1. Navigate to Org2 to update the owner of a car **PUT /System/Resources/Car Update the owner of a car in the ledger**
+
+1. Click **Try it out**
+
+1. Fill in the example Schema
 
 
-    
+```
+{
+  "make": "string",
+  "model": "string",
+  "colour": "string",
+  "owner": "Yasmin A",
+  "key": "CAR23"
+}
+```
+
+1. Re-query CAR23 to see the updated owner.
+
+## 11. Stop the Open Liberty servers
+
+Once you have finished, for both organsiations go to VS Code > Liberty Dev Dashboard, and press **Stop**. This will stop the Open Liberty server. 
+
+Now, the servers is off and the application is not running anymore. If you tried to hit one of the endpoints, it would not find it.
+
+## 12. Tear down the blockchain network
+
+*Optional*: You can stop the blockchain network, and save the state on the ledger if you decide to come back to it later. Click on the IBM Blockchain Platform icon on the left side. On Fabric Environments, click **...** > **Stop Fabric Environment**. 
+
+1. You can easily start it again by clicking `1 Org Local Fabric`. 
+
+To remove the Docker images where it is running, on Fabric Environments click **...** > **Teardown Fabric Environment**.
+
+## Conclusion
+
+Well done. You have created a fully distributed 2 Org network, submitted transactions to the blockchain and listened to events from the distributed network. As well as updating the owner of a car based off events. 
+
 
