@@ -205,10 +205,7 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
    1. To disconnect from Org1 Fabric gateway press the "door" icon 
 
     <img src="images/exit-door.png" alt="drawing">
-
-  1. 
-
-
+ 
 1. Export the Fabric Wallets:
 
    1. In the "FABRIC WALLETS" panel, select **1 Org Local Fabric**, then right-click **Org1**, and select **Export Wallet**.
@@ -413,7 +410,7 @@ The successful response should look like:
 
 
 
-## 11. Stop the Open Liberty servers
+## 11. Stop the Open Liberty microservices
 
 Once you have finished, for both organsiations go to VS Code > Liberty Dev Dashboard, and press **Stop**. This will stop the Open Liberty server. 
 
