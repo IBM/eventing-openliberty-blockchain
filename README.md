@@ -311,10 +311,9 @@ There are two ways Organization two can receive the events:
 
 
 
-1.  Navigate to `http://localhost:9081/openapi/ui` 
+1.  Navigate to the buyers' Java microservice on port 9081: http://localhost:9081/openapi/ui 
 
     An event has been triggered out of Hyperledger Fabric
-
 
 1. Navigate to **GET /System/Resources/TransactionId Returns transactionId data**.
 
@@ -404,10 +403,11 @@ Query the recently added car by inserting the ID and clicking Execute.
 
 The successful response should look like:
 
+```
    Queried car Successfully.
    Key = CAR23
    Details = {"make":"Ford","model":"Fiesta","colour":"Blue","owner":"Yasmin A"}
-
+```
 
 
 ## 11. Stop the Open Liberty microservices
