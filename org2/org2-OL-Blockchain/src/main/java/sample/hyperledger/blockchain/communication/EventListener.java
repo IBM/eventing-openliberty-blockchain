@@ -1,3 +1,8 @@
+/**
+* @author  Thomas Jennings
+* @since   2020-06-08
+*/
+
 package sample.hyperledger.blockchain.communication;
 
 import static javax.ejb.ConcurrencyManagementType.CONTAINER;
