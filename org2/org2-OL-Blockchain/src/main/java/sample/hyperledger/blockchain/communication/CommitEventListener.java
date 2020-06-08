@@ -1,3 +1,7 @@
+/**
+* @author  Thomas Jennings
+* @since   2020-06-08
+*/
 package sample.hyperledger.blockchain.communication;
 
 import org.hyperledger.fabric.sdk.BlockEvent;
