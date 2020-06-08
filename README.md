@@ -1,25 +1,30 @@
-# Listen to events out of a distributed blockchain network using Open Liberty
+<!-- 
+Author: Thomas Jennings
+email: thomas.jennings@ibm.com
+ -->
+# Use Java microservices to listen for events from a distributed blockchain network using Open Liberty.
 
+<!-- # Listen to events out of a distributed blockchain network using Open Liberty -->
 
 > 2 Org Hyperledger Fabric sample using Open Liberty to execute transactions and listen to events with IBM Blockchain Platform
 
 
 In this tutorial, you will learn to:
 
-* Use the IBM Blockchain Platform extension to create a fully distributed 2 Org local blockchain network and deploy a sample smart contract (based on cars)
+* Use the IBM Blockchain Platform extension to create a fully distributed 2 Org local blockchain network and deploy a sample smart contract Fabcar
 * Use the [Open Liberty](https://openliberty.io) extension to start two web servers that can communicate with your blockchain network
-* Transact on the blockchain network from one web server via REST APIs to sell cars and listen for events emitted out of Hyperledger fabric on the buyer organization. 
+* Transact on the blockchain network from a sellers web server to sell cars and listen for events emitted out of Hyperledger fabric on the buyers web server. 
 
-Learn about the fundamentals of blockchain and Open Liberty by following the [Integrate Java microservices with blockchain using Hyperledger Fabric and Open Liberty](https://developer.ibm.com/tutorials/integrate-java-microservices-with-blockchain-using-hyperledger-fabric-and-open-liberty/) to experience starting a 1 Org blockchain network and an Open Liberty server to execute transactions to blockchain. Also, follow this to follow the instructions on installing the IBM Blockchain platform VS Code extension.
+Learn about the fundamentals of blockchain and Open Liberty by following the [Integrate Java microservices with blockchain using Hyperledger Fabric and Open Liberty](https://developer.ibm.com/tutorials/integrate-java-microservices-with-blockchain-using-hyperledger-fabric-and-open-liberty/) to experience starting a 1 Org blockchain network and an Open Liberty server to execute transactions to blockchain. 
 
 You will use a fully distributed 2 Org blockchain network. Leveraging a distributed network and Open Liberty to submit transactions and listen to events.
 
 Using blockchain provides supply chains a permanent record of transactions which are grouped in blocks that cannot be altered, creating an alternative to traditional paper tracking and manual inspection systems, which can leave supply chains vulnerable to inaccuracies and fraud.
 
-In our example we are creating a distributed blockchain network using a buyer and a seller in a supply chain for car sales, based on the fabcar sample.
+In our example we are creating a distributed blockchain network using a buyer and a seller in a supply chain scenario for car sales.
 
-The seller (Org 1) can add a car to the blockchain network, which will emit an event notifying other organisations an event has occured on the blockchain.
-The buyer (Org 2) becomes notified that a new car has been added to the blockchain network. The buyer will be notified through Open Liberty and see the new car which is up for sale, with a transaction ID. If the buyer is looking for a new car,they can query the car which has been added to the blockchain network. 
+The seller (Org 1) can add a car to the blockchain network, this will emit an event notifying other organisations an event has occured on the blockchain.
+The buyer (Org 2) becomes notified that a new car has been added to the blockchain network through Open Liberty. If the buyer is looking for a new car, they can query the car which has been added to the blockchain network, query the transaction id or listen for events automatically.
 
 ## Architecture flow
 
@@ -35,29 +40,31 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
 ## Steps
 
-* Import the Open Liberty projects into VS Code
+* Import the Open Liberty projects into VS Code.
 
-* Import the "fabcar" sample smart contract project into VS Code
+* Import the "fabcar" sample smart contract project into VS Code.
 
-* Start a 2 Org blockchain network and deploy the contract to both organisations
+* Start a 2 Org blockchain network and deploy the contract to both organizations.
 
-* Export credentials for Org1 and Org2 to communicate with the blockchain network
+* Export credentials for Org1 and Org2 to communicate with the blockchain network.
 
 * Startup the buyer and seller Open Liberty servers.
 
 * Add a car to the ledger from Org1.
 
-* Look at the events out of hyperledger fabric.
+*  Query all ledger state as a buyer.
 
-* Update the owner of a Car on the Ledger
+* View events out of hyperledger fabric.
 
-* Optional - View Open Liberty Metrics
+* Listen to Events automatically from Hyperledger Fabric.
 
-* Stop the Open Liberty server
+* Update the owner of a Car on the Ledger as a buyer.
 
-* Stop the Blockchain Network
+* Stop the Open Liberty server.
 
-* Finished
+* Stop the Blockchain Network.
+
+* Finished.
 
 
 ## 1. Get the development tools
@@ -78,7 +85,7 @@ The buyer (Org 2) becomes notified that a new car has been added to the blockcha
 
 1. Open a new VS Code window to add the Org2 project **File** > **New Window**. Import the Org2 project **File** > **Open** > **eventing/org2**, and then click **Open**.
 
-    Adding the Org2 project is what makes the blockchain network dectralized as it will add multiple organizations. Open the `Liberty Dev Dashboard` to view the `org2-ol-blockchain`.
+    Adding the Org2 project is what makes the blockchain network distributed as it will add multiple organizations. Open the `Liberty Dev Dashboard` to view the `org2-ol-blockchain`.
 
 ## 3. Import the FabCar sample smart contract project into VS Code
 
@@ -158,7 +165,7 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
 
    1. Select `Org1` and "Choose an identity to connect with" will appear from the command palette. Select **admin**.
 
-      <img src="images/identity-admin.png" alt="drawing" width="500" height="180">
+      <img src="images/identity-admin.png">
 
    1. Hover over the **FABRIC GATEWAYS** heading, click **...** > **Export connection profile**.
 
