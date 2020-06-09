@@ -23,7 +23,7 @@
   <keyStore id="defaultKeyStore" location="key.jks" type="jks" password="mpKeystore"/>
   
   <!-- tag::webApplication[] -->
-  <!-- <webApplication location="guide-rest-intro.war" contextRoot="${app.context.root}"/> -->
-  <webApplication location="ol-blockchain.war" contextRoot="${app.context.root}"/>
+  <!-- <webApplication location="org-1-ol-blockchain.war" contextRoot="${app.context.root}"/> -->
+  <webApplication location="org-1-ol-blockchain.war" contextRoot="${app.context.root}"/>
   <!-- end::webApplication[] -->
 </server>
