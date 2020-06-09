@@ -145,5 +145,5 @@
             </plugin>
         </plugins>
     </build>
-    <artifactId>ol-blockchain</artifactId>
+    <artifactId>org-2-ol-blockchain</artifactId>
 </project>
