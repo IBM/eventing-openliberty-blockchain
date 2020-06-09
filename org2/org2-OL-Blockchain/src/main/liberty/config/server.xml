@@ -1,4 +1,4 @@
-<server description="Intro REST Guide Liberty server">
+<server description="Org2 blockchain server">
   <!-- tag::featureManager[] -->
   <featureManager>
       <feature>jaxrs-2.1</feature>
@@ -26,7 +26,7 @@
   <keyStore id="defaultKeyStore" location="key.jks" type="jks" password="mpKeystore"/>
   
   <!-- tag::webApplication[] -->
-  <!-- <webApplication location="guide-rest-intro.war" contextRoot="${app.context.root}"/> -->
-  <webApplication location="ol-blockchain.war" contextRoot="${app.context.root}"/>
+  <!-- <webApplication location="org-2-ol-blockchain.war" contextRoot="${app.context.root}"/> -->
+  <webApplication location="org-2-ol-blockchain.war" contextRoot="${app.context.root}"/>
   <!-- end::webApplication[] -->
 </server>
