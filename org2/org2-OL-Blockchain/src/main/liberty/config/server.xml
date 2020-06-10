@@ -29,4 +29,8 @@
   <!-- <webApplication location="org-2-ol-blockchain.war" contextRoot="${app.context.root}"/> -->
   <webApplication location="org-2-ol-blockchain.war" contextRoot="${app.context.root}"/>
   <!-- end::webApplication[] -->
+  
+  <cors domain="${app.context.root}"
+    allowedOrigins="*"
+    allowedMethods="GET"/>
 </server>
