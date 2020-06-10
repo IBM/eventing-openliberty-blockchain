@@ -1,7 +1,8 @@
 /**
 * @author  Thomas Jennings
-* @since   2020-06-08
+* @since   2020-06-10
 */
+
 package sample.hyperledger.blockchain.communication;
 
 import java.io.IOException;
@@ -14,7 +15,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Network;
 import org.hyperledger.fabric.gateway.Wallet;
@@ -35,15 +40,11 @@ import com.google.protobuf.InvalidProtocolBufferException;
 @WebServlet(urlPatterns="/servlet")
 public class EventNotificationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	 static String pathRoot = "/Users/Shared/FabConnection/";
-	
-	 @EJB
-	 private EventListener el;
 	 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-    	//navigation to http://localhost:9081/ol-blockchain/servlet
+    	
+    	//navigation to http://localhost:9081/org2-ol-blockchain/servlet
         response.getWriter().append(getHTMLResponseString());
     }
 
@@ -54,99 +55,33 @@ public class EventNotificationServlet extends HttpServlet {
     
     private String getHTMLResponseString()
     {	
-    	String lastEvent = el.getLastTransactionId(); 
-    	
     	StringBuilder sb = new StringBuilder("<!DOCTYPE html>");
     	
     	sb.append("<html>");
     	sb.append("<body>");
     	sb.append("<h2>Notification of new cars on the Ledger</h2>");
-    	sb.append("<p>This screen is refreshed every 3 seconds</p>");
-    	sb.append("<p>Last event is Transaction Id:" + lastEvent + " </p>");
-    	sb.append("<p>Transaction Detail:" + GetLastTransactionIdResult() + " </p>");
+    	sb.append("<p id=\"content\">No data</p>");
+    	sb.append("<p>This screen is refreshed every 5 seconds</p>");
+    	
     	sb.append("<script>");
     	sb.append("window.onload = function() {");
-    	sb.append("setTimeout(function () {");
-    	sb.append("location.reload()");
-    	sb.append(" }, 3000);};");
-    	sb.append("</script> ");
+    	sb.append("setInterval(function () {");
+    	sb.append("httpGet()");
+    	sb.append("}, 5000);");
+    	sb.append("};");
+    	
+    	sb.append("function httpGet()");
+    	sb.append("{");
+    	sb.append("var xmlHttp = new XMLHttpRequest();");
+    	sb.append("xmlHttp.open( \"GET\", \"http://localhost:9081/org-2-ol-blockchain/System/Resources/TransactionId\", false );");
+    	sb.append("xmlHttp.send( null );");
+    	sb.append("document.getElementById(\"content\").innerHTML = xmlHttp.responseText;");
+    	sb.append("return xmlHttp.responseText;");
+    	sb.append(" }");
+    	sb.append("</script> ");	
     	sb.append("</body>");
     	sb.append("</html>");
     	
     	return sb.toString();
     }
-    
-    private String GetLastTransactionIdResult() {
-		
-    	String passedOutput = "";
-		
-		String lastEvent = el.getLastTransactionId(); 
-		
-		if (lastEvent.contentEquals("None")) {return "No new events";}
-		
-		try {
-			Path walletPath = Paths.get(pathRoot + "org-2-wallet");
-			Wallet wallet = Wallet.createFileSystemWallet(walletPath);
-			
-			//load a CCP
-			//expecting the connect profile json file; export the Connection Profile from the
-			//fabric gateway and add to the default server location 
-			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
-			Gateway.Builder builder = Gateway.createBuilder();
-			
-			//expecting wallet directory within the default server location
-			//wallet exported from Fabric wallets Org 1
-			builder.identity(wallet, "org2Admin").networkConfig(networkConfigPath).discovery(true);
-			
-			try (Gateway gateway = builder.connect()) {
-				
-				// get the network and contract
-				Network network = gateway.getNetwork("mychannel");
-			    Channel ch = network.getChannel();
-			    TransactionInfo ti = ch.queryTransactionByID(lastEvent);
-			    System.out.println("TransactionInfo : "+ ti.toString());
-			    
-			    ProcessedTransaction pt = ti.getProcessedTransaction();
-			    Envelope ev = pt.getTransactionEnvelope();
-			    System.out.println("Envelope created - next get payload");
-			    	    
-			    try {
-			    	Payload payload = Payload.parseFrom(ev.getPayload());
-			        FabricTransaction.Transaction transaction = FabricTransaction.Transaction.parseFrom(payload.getData());
-				    FabricTransaction.TransactionAction action = transaction.getActionsList().get(0); // 0 is a index
-				    FabricTransaction.ChaincodeActionPayload chaincodeActionPayload = FabricTransaction.ChaincodeActionPayload.parseFrom(action.getPayload());
-				    
-				    FabricProposalResponse.ProposalResponsePayload prp = FabricProposalResponse.ProposalResponsePayload.parseFrom(chaincodeActionPayload.getAction().getProposalResponsePayload());
-				    //ChaincodeAction; the actions the events generated by the Chaincode
-				    FabricProposal.ChaincodeAction ca = FabricProposal.ChaincodeAction.parseFrom(prp.getExtension());
-				    
-				    //in proposal_response_payload, the results are the Read Write Set (RWSet)
-				    Rwset.TxReadWriteSet txnRWS = Rwset.TxReadWriteSet.parseFrom(ca.getResults());
-				    TxReadWriteSetInfo txrwsInfo = new TxReadWriteSetInfo(txnRWS);
-				    
-				    //Keyvalue datamodel
-				    KvRwset.KVRWSet kvRWSet = txrwsInfo.getNsRwsetInfo(0).getRwset();
-				    
-				    //KVWrite captures a write (update/delete) operation 
-				    KvRwset.KVWrite kvWrite = kvRWSet.getWrites(0);
-				    passedOutput = kvWrite.getValue().toStringUtf8();
-				    System.out.println(passedOutput);
-				    System.out.println("There it is ........");
-			      } catch (InvalidProtocolBufferException e) {
-			        throw new Exception("Error creating object from ByteString", e);
-			      }	
-				return passedOutput;
-			}
-			catch (Exception e){
-				System.out.println("Unable to get network/channel and retrieve the transaction data"); 
-				throw new javax.ws.rs.ServiceUnavailableException();
-			}
-		} 
-		catch (Exception e2) 
-		{
-			System.out.println("Unable to find config or wallet - please check the wallet directory and connection json"); 
-			throw new javax.ws.rs.ServiceUnavailableException();
-		}
-	}
-
 }
