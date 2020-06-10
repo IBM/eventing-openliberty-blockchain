@@ -163,7 +163,7 @@ public class Resources {
 	@Operation(
 			summary = "Returns an individual car by key",
 			description = "Requires the key to be provided")
-	public String Querycar(@QueryParam("Key")String Key) 
+	public String queryCar(@QueryParam("Key")String Key) 
 	{
 	
 		byte[] result = null;
@@ -223,7 +223,7 @@ public class Resources {
 	@Operation(
 			summary = "Returns all cars",
 			description = "No input required")
-	public String Querycar() {
+	public String queryCars() {
 		
 		byte[] result = null;
 		String outputString = "";
