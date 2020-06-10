@@ -185,7 +185,7 @@ public class Resources {
 	@Operation(
 			summary = "Returns an individual car by key",
 			description = "Requires the key to be provided")
-	public String Querycar(@QueryParam("Key")String Key) 
+	public String queryCars(@QueryParam("Key")String Key) 
 	{
 	
 		byte[] result = null;
@@ -245,7 +245,7 @@ public class Resources {
 	@Operation(
 			summary = "Returns all cars",
 			description = "No input required")
-	public String Querycar() {
+	public String queryCar() {
 		
 		byte[] result = null;
 		String outputString = "";
@@ -305,7 +305,29 @@ public class Resources {
 			summary = "Returns transactionId data",
 			description = "TransactionId")
 	public String QueryLastTransactionId() {
-		return QueryLastTransactionIdResult();
+		
+		String lastEvent = el.getLastTransactionId(); 
+		
+		if (lastEvent.compareTo("None")  == 0)
+		{
+			return "No last transaction";
+		}
+		else
+		{
+			if (lastEvent.compareTo(el.getLastQueriedId()) == 0)
+			{
+				//if it's the same txnId as previous return the existing result
+				return el.getLastTxnIdResponse();
+			}
+			else
+			{
+				//get the new transaction details
+				el.setLastQueriedId(lastEvent);
+				String txnResponse = QueryLastTransactionIdResult();
+				el.setLastTxnIdResponse(txnResponse);
+				return txnResponse;
+			}
+		}
 	}
 	
 	private String QueryLastTransactionIdResult() {
@@ -360,7 +382,7 @@ public class Resources {
 				    passedOutput = kvWrite.getValue().toStringUtf8();
 				    
 				    System.out.println(passedOutput);
-				    System.out.println("There it is ........");
+				    //System.out.println("There it is ........");
 			      } catch (InvalidProtocolBufferException e) {
 			        throw new Exception("Error creating object from ByteString", e);
 			      }	
@@ -377,6 +399,23 @@ public class Resources {
 			throw new javax.ws.rs.ServiceUnavailableException();
 		}
 	}
+	
+	@GET
+	@javax.ws.rs.Path("Test")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(
+			summary = "called method from servlet",
+			description = "to see whether it is doing a GET request from servlet")
+	
+	public String test() {
+		
+		//EventListener el = new EventListener();
+		String enter = "called method";
+		
+		//if (lastEvent.length() == 0) {lastEvent = "None";}
+		return enter;
+	}
+	
 	
 	@GET
 	@javax.ws.rs.Path("Events")

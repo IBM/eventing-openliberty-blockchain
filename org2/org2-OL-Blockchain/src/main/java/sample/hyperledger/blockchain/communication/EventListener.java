@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -29,8 +28,6 @@ import org.hyperledger.fabric.gateway.Wallet;
 import org.hyperledger.fabric.sdk.BlockEvent;
 import org.hyperledger.fabric.sdk.BlockEvent.TransactionEvent;
 
-//@ConcurrencyManagement(BEAN)
-
 @Singleton
 @Startup
 @ConcurrencyManagement(CONTAINER)
@@ -42,6 +39,8 @@ public class EventListener {
 	private final BlockingQueue<BlockEvent> blockEvents = new LinkedBlockingQueue<>();
 	
 	private String lastTxnId = "";
+	private String lastQueriedTxnId = "";
+	private String lastTxnIdResonse = "";
 	
 	public Gateway pgateway = null;
 	Gateway.Builder builder = Gateway.createBuilder();
@@ -65,16 +64,14 @@ public class EventListener {
 			//expecting the connect profile json file; export the Connection Profile from the
 			//fabric gateway and add to the default server location 
 			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
-			System.out.println("NetworkConfigPath");
+			//System.out.println("NetworkConfigPath");
 		
 			//expecting wallet directory within the default server location
 			//wallet exported from Fabric wallets Org 1
 			builder.identity(wallet, "org2Admin").networkConfig(networkConfigPath).discovery(true);
-			System.out.println("Got identity");
 			
 			pgateway = builder.connect();
 			Network network = pgateway.getNetwork("mychannel");
-			System.out.println("Network");
 			
             blockListener = network.addBlockListener(blockEvents::add);
             System.out.println("Blocklistener");
@@ -102,7 +99,6 @@ public class EventListener {
     	catch (Exception e)
     	{
     		//normal timeout will cause this exception if there isn't anything
-    		System.out.println("No New Events");
     	}
     }
     
@@ -115,6 +111,26 @@ public class EventListener {
 		return lastTxnId;
 	}
 	
+    @Lock(LockType.WRITE)
+    public void setLastQueriedId(String txnId) {
+    	lastQueriedTxnId = txnId;
+    }
+    
+    @Lock(LockType.READ)
+    public String getLastQueriedId() {
+    	return lastQueriedTxnId;
+    }
+    
+    @Lock(LockType.WRITE)
+    public void setLastTxnIdResponse(String lastResponse) {
+    	lastTxnIdResonse = lastResponse;
+    }
+    
+    @Lock(LockType.READ)
+    public String getLastTxnIdResponse() {
+    	return lastTxnIdResonse;
+    }
+    
 	private BlockEvent getBlockEvent() throws InterruptedException {
 			BlockEvent event =null;
 			event = blockEvents.poll();		
