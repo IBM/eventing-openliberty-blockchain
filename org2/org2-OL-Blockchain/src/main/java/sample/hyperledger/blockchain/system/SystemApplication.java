@@ -24,11 +24,6 @@ import javax.ws.rs.ApplicationPath;
 // end::applicationPath[]
 // tag::systemApplication[]
 public class SystemApplication extends Application {
-	//public static EventListener ev = null;
 	
-	//@PostConstruct
-	//public void init() {
-	//	ev = new EventListener("hello");
-	//}	
 }
 // end::systemApplication[]

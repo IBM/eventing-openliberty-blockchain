@@ -31,7 +31,6 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     // end::produces[]
     public Properties getProperties() {
-    	System.out.println("Called Properties");
         return System.getProperties();
     }
 
