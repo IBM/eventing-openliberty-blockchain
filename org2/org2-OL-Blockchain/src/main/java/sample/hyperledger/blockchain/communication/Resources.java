@@ -401,23 +401,6 @@ public class Resources {
 	}
 	
 	@GET
-	@javax.ws.rs.Path("Test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Operation(
-			summary = "called method from servlet",
-			description = "to see whether it is doing a GET request from servlet")
-	
-	public String test() {
-		
-		//EventListener el = new EventListener();
-		String enter = "called method";
-		
-		//if (lastEvent.length() == 0) {lastEvent = "None";}
-		return enter;
-	}
-	
-	
-	@GET
 	@javax.ws.rs.Path("Events")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(
