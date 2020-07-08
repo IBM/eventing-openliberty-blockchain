@@ -4,8 +4,6 @@ email: thomas.jennings@ibm.com
  -->
 # Listen to blockchain events in Java microservices
 
-<!-- # Listen to events out of a distributed blockchain network using Open Liberty -->
-
 > 2 Org Hyperledger Fabric sample using Open Liberty to execute transactions and listen to events with IBM Blockchain Platform
 
 Use Java microservices to listen for events from a distributed blockchain network using Open Liberty. Submit transactions and listen to events using Hyperledger Java SDK and Open Liberty.
@@ -254,7 +252,7 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
 
 As there are two organizations, we are going to test submitting a transaction from the seller and view the updated Ledger as the buyer.
 
-1. Navigate to the seller's [Java microservice on port 9080](http://localhost:9080/openapi/ui/)
+1. Navigate to the seller's Java microservice on port 9080: http://localhost:9080/openapi/ui/
 
 1. Navigate to **POST /System/Resources/Car Add a car to the ledger**.
 
@@ -276,7 +274,7 @@ As there are two organizations, we are going to test submitting a transaction fr
 
 A buyer may be interested in purchasing a used car and will query all cars on the blockchain.
 
-1. Navigate to the buyer's [Java microservice on port 9081](http://localhost:9081/openapi/ui/)
+1. Navigate to the buyer's Java microservice on port 9081: http://localhost:9081/openapi/ui/
 
 1. Navigate to **GET /System/Resources/Cars Returns all cars > Try it out > Execute.**
 
@@ -392,7 +390,9 @@ The buyer on Organization 2 may decide they want to buy the car from the seller.
 
 ## 11. Query a specific car on the ledger
 
-As the blockchain is distribured you can query the specific car from any organization. However as the buyer has agreed to buy the car query it from Org2
+As the blockchain is distributed you can query the specific car from any organization. However as the buyer has agreed to buy the car query it from Org2:
+
+`http://localhost:9081/openapi/ui/`
 
 As well as a unique transaction id there is a unique key for every car. The difference between a transaction id and the key is every time a transaction is made, even with the same key, the transaction id changes. They key does not.
 
