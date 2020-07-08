@@ -300,7 +300,7 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
 3. Organization two has the configuration to listen to the events, resulting in the organization receiving the event triggered by Org1.
 
-4 5. This is an event-driven architecture between organization one and organization two. Organization two automatically receives events emitted out of Hyperledger Fabric and displays these through a servlet.
+4. This is an event-driven architecture between organization one and organization two. Organization two automatically receives events emitted out of Hyperledger Fabric and displays these through a servlet (5).
 
 ### Submit a new transaction
 
@@ -312,11 +312,11 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
     ```
     {
-     "make": "Range Rover",
-     "model": "Sport",
-     "colour": "Gunmetal Grey",
+     "make": "Audi",
+     "model": "A6",
+     "colour": "Black",
      "owner": "David J",
-      "key": "CAR20"
+      "key": "CAR21"
     }
     ```
 
@@ -344,7 +344,7 @@ The diagram illustrates how Open Liberty is listening to events from Hyperledger
 
 Open another tab on the web browser of your choice and experience the event-based driven architecture of listening to events 
 
-1. Navigate to http://localhost:9081/ol-blockchain/servlet
+1. Navigate to http://localhost:9081/org-2-ol-blockchain/servlet
 
     The Servlet on Org2 listening to events automatically out of Hyperledger Fabric. This is done through a [servlet.](https://openliberty.io/guides/maven-intro.html#creating-the-project-pom-file)  
 
@@ -357,12 +357,12 @@ Open another tab on the web browser of your choice and experience the event-base
 1. Fill in the example schema with the following values, as illustrated in the figure:
 
 ```
- {
+{
   "make": "Ford",
   "model": "Fiesta",
   "colour": "Blue",
   "owner": "Hannah J",
-  "key": "CAR23"
+  "key": "CAR22"
 }
 ```
 
