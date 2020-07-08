@@ -50,19 +50,19 @@ public class Resources {
 	@javax.ws.rs.Path("Car")
 	@Operation(
 			summary = "Add a car to the ledger",
-			description = "Requires a unique key starting with CAR to be successfull")
+			description = "Requires a unique key starting with CAR to be successful")
 	public Car addCar(
 			Car aCar
 			)
 	{
 		try {
-			Path walletPath = Paths.get(pathRoot + "wallet");
+			Path walletPath = Paths.get(pathRoot + "org-1-wallet");
 			Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 			
 			//load a CCP
 			//expecting the connect profile json file; export the Connection Profile from the
 			//fabric gateway and add to the default server location 
-			Path networkConfigPath = Paths.get(pathRoot + "1-Org-Local-Fabric-Org1_connection.json");
+			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
 			
 			Gateway.Builder builder = Gateway.createBuilder();
 			
@@ -112,13 +112,13 @@ public class Resources {
 			)
 	{
 		try {
-			Path walletPath = Paths.get(pathRoot + "wallet");
+			Path walletPath = Paths.get(pathRoot + "org-1-wallet");
 			Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 			
 			//load a CCP
 			//expecting the connect profile json file; export the Connection Profile from the
 			//fabric gateway and add to the default server location 
-			Path networkConfigPath = Paths.get(pathRoot + "1-Org-Local-Fabric-Org1_connection.json");
+			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
 			
 			Gateway.Builder builder = Gateway.createBuilder();
 			
@@ -171,13 +171,13 @@ public class Resources {
 		String passedOutput = "";
 		
 		try {
-			Path walletPath = Paths.get(pathRoot + "wallet");
+			Path walletPath = Paths.get(pathRoot + "org-1-wallet");
 			Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 			
 			//load a CCP
 			//expecting the connect profile json file; export the Connection Profile from the
 			//fabric gateway and add to the default server location 
-			Path networkConfigPath = Paths.get(pathRoot + "1-Org-Local-Fabric-Org1_connection.json");
+			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
 			
 			Gateway.Builder builder = Gateway.createBuilder();
 			
@@ -230,13 +230,13 @@ public class Resources {
 		String passedOutput = "";
 		
 		try {
-			Path walletPath = Paths.get(pathRoot + "wallet");
+			Path walletPath = Paths.get(pathRoot + "org-1-wallet");
 			Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 			
 			//load a CCP
 			//expecting the connect profile json file; export the Connection Profile from the
 			//fabric gateway and add to the default server location 
-			Path networkConfigPath = Paths.get(pathRoot + "1-Org-Local-Fabric-Org1_connection.json");
+			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
 			Gateway.Builder builder = Gateway.createBuilder();
 			
 			//expecting wallet directory within the default server location
