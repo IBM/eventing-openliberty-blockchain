@@ -29,19 +29,19 @@ The seller will add a car to the blockchain network and the buyer will be notifi
 The buyer can listen to events in two ways: 
 
 1. Querying last event
-2. Listen to events through a web interface that updates automatically with new transaction data.
+2. Listen to events through a web interface that automatically updates with new transaction data.
 
 ## Architecture flow
 
  <img src="images/ArchitectDiagram.png" alt="drawing">
  
-1. The developer develops a smart contract using Java (Preconfigured FabCar sample)
+1. The developer develops a smart contract using Java (Preconfigured "fabcar" sample)
  
-2. Use the IBM Blockchain Platform Extension for VS Code to package the Decentralized FabCar smart contract.
+2. Use the IBM Blockchain Platform Extension for VS Code to package the Decentralized "fabcar" smart contract.
 
 3. Setup and launch the IBM Blockchain Platform 2.0 service
 
-4. The IBM Blockchain Platform 2.0 enables the creation of a network in Docker containers locally enabling installation and instantiation of the FabCar smart contract on the network for 2 organizations
+4. The IBM Blockchain Platform 2.0 enables the creation of a network in Docker containers locally enabling installation and instantiation of the "fabcar" smart contract on the network for 2 organizations
 
 5. The seller adds a new car to the ledger using Open Liberty Organization 1.
 
@@ -64,7 +64,7 @@ The buyer can listen to events in two ways:
 
 * Import the Open Liberty projects into VS Code.
 
-* Import the "fabcar" sample smart contract project into VS Code.
+* Import the FabCar sample smart contract project into VS Code.
 
 * Start a 2 Org blockchain network and deploy the contract to both organizations.
 
@@ -78,7 +78,7 @@ The buyer can listen to events in two ways:
 
 * View events from Hyperledger Fabric.
 
-* Listen to Events automatically from Hyperledger Fabric.
+* Listen to events through a web interface.
 
 * Update the owner of a Car on the Ledger from Org2.
 
@@ -100,11 +100,15 @@ The buyer can listen to events in two ways:
 
 ## 2. Import the Open Liberty projects into VS Code
 
+1. Open a terminal window and clone the sample project in GitHub:
+
+    `git clone https://github.com/tomjenningss/eventing-openliberty-blockchain.git`
+
 1. Add the Org1 project to VS Code, select **File** > **Open** > **eventing/org1**, and then click **Open**.
 
     This will add the Org1 project to the workspace and will automatically add `Liberty Dev Dashboard` into the VS Code extension. Clicking on the `Liberty Dev Dashboard` will display `org1-ol-blockchain`
 
-1. Open a new VS Code window to add the Org2 project **File** > **New Window**. Import the Org2 project **File** > **Open** > **eventing/org2**, and then click **Open**.
+1. Open a new VS Code window to add the Org2 project: **File** > **New Window**. Import the Org2 project **File** > **Open** > **eventing/org2**, and then click **Open**.
 
     Adding the Org2 project is what makes the blockchain network distributed as it will add multiple organizations. Open the `Liberty Dev Dashboard` to view the `org2-ol-blockchain`.
 
@@ -116,7 +120,7 @@ The buyer can listen to events in two ways:
 
     It may take a moment. In the purple bar at the bottom, it will say, "Activating extension."
 
-1. Select **FabCar** from the "Explore sample code" section.
+1. Select **FabCar** from the "Other "Resources" section.
 
 1. Click the **Clone** button to git clone the sample code for the FabCar sample, and choose a convenient location to clone the fabric sample.
 
@@ -148,7 +152,9 @@ The buyer can listen to events in two ways:
 
 1. Name the Environment `2 Org Local Fabric`
 
-1. Once you're connected to the "2 Org Local Fabric" environment (this happens automatically after it has started), under **Smart Contracts** > **Instantiated**, click **+Instantiate**.`
+    This will take 2 - 5 minutes to start new local environemt. Once successful it will display "Successfully added a new environment".
+
+1. Click on the `2 Org Local Fabric o` to connect to local fabric runtime. Once you're connected to the "2 Org Local Fabric" environment, under **Smart Contracts** > **Instantiated**, click **+Instantiate**.`
 
 1. Choose **fabcar-contract-java Open Project** (at the Command Palette prompt).
 
@@ -261,14 +267,14 @@ As there are two organizations, we are going to test submitting a transaction fr
      "make": "VW",
      "model": "Golf",
      "colour": "White",
-     "owner": "Tom Jennings"
+     "owner": "Tom Jennings",
      "key": "CAR20"
    }
    ```
 
 ## 8. Query all ledger state as a buyer
 
-A buyer on the blockchain may be interested in buying a used car and will query all cars.
+A buyer may be interested in purchasing a used car and will query all cars on the blockchain.
 
 1. Navigate to the buyer's [Java microservice on port 9081](http://localhost:9081/openapi/ui/)
 
@@ -284,19 +290,17 @@ Cars:
 
 ## 9. Events out of Hyperledger Fabric
 
-Hyperledger Fabric has the event logic preconfigured. When a transaction is submitted the event logic is triggered, however the client is not always listening to events. 
-
 The diagram illustrates how Open Liberty is listening to events from Hyperledger Fabric locally. 
 
  <img src="images/events-diagram.png" alt="drawing">
 
-1. The seller submits a transaction as a REST request and the Java microservice processes the car and adds it to the blockchain network. <br><br>A. The vehicle can be queried by any organization, as demonstrated in step 7.
+1. The seller submits a transaction and the Java microservice processes the car and adds it to the blockchain network. <br><br>A. The vehicle can be queried by any organization, as demonstrated in step 7.
 
 2. When the buyer or seller submits a transaction to the Ledger, an event is emitted from Hyperledger Fabric. Organization One does not have the configuration to listen for the said event as the seller is not interested in being notified of the event.
 
-3. For Organization two, the event triggered by Organization One has the configuration to listen to the events, resulting in the organization receiving the event.
+3. Organization two has the configuration to listen to the events, resulting in the organization receiving the event triggered by Org1.
 
-4. This is an event-driven architecture between organization one and organization two, organization two automatically gets events emitted out of Hyperledger Fabric and displays these through a servlet.
+4 5. This is an event-driven architecture between organization one and organization two. Organization two automatically receives events emitted out of Hyperledger Fabric and displays these through a servlet.
 
 ### Submit a new transaction
 
