@@ -72,7 +72,7 @@ public class Resources {
 	@javax.ws.rs.Path("Car")
 	@Operation(
 			summary = "Add a car to the ledger",
-			description = "Requires a unique key starting with CAR to be successfull")
+			description = "Requires a unique key starting with CAR to be successful")
 	public Car addCar(
 			Car aCar
 			)
@@ -259,12 +259,12 @@ public class Resources {
 			//expecting the connect profile json file; export the Connection Profile from the
 			//fabric gateway and add to the default server location 
 			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
-			Gateway.Builder builder = Gateway.createBuilder();
+			Gateway.Builder builder = Gateway.createBuilder();			
 			
 			//expecting wallet directory within the default server location
 			//wallet exported from Fabric wallets Org 1
 			builder.identity(wallet, "org2Admin").networkConfig(networkConfigPath).discovery(true);
-			
+			System.out.println("passes");
 			try (Gateway gateway = builder.connect()) {
 				
 				// get the network and contract
@@ -272,7 +272,8 @@ public class Resources {
 				Contract contract = network.getContract("fabcar");
 				result = contract.evaluateTransaction("queryAllCars");
 				outputString = new String(result);
-				passedOutput = "Queried all Cars Successfully. \nCars are:\n " + outputString;	
+				passedOutput = "Queried all Cars Successfully. \nCars are:\n " + outputString;
+			
 				return passedOutput;
 			}
 			catch (Exception e){
