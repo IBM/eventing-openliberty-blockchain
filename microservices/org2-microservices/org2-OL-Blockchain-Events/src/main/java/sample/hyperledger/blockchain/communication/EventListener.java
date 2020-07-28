@@ -1,0 +1,140 @@
+/**
+* @author  Thomas Jennings
+* @since   2020-06-08
+*/
+
+package sample.hyperledger.blockchain.communication;
+
+import static javax.ejb.ConcurrencyManagementType.CONTAINER;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Consumer;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.ejb.Timeout;
+import javax.ejb.Timer;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
+import org.hyperledger.fabric.gateway.Gateway;
+import org.hyperledger.fabric.gateway.Network;
+import org.hyperledger.fabric.gateway.Wallet;
+import org.hyperledger.fabric.sdk.BlockEvent;
+import org.hyperledger.fabric.sdk.BlockEvent.TransactionEvent;
+
+@Singleton
+@Startup
+@ConcurrencyManagement(CONTAINER)
+public class EventListener {
+	
+	//set this for the location of the wallet directory and the connection json file
+	static String pathRoot = "/Users/Shared/FabConnection/";
+	private Consumer<BlockEvent> blockListener;
+	private final BlockingQueue<BlockEvent> blockEvents = new LinkedBlockingQueue<>();
+	
+	private String lastTxnId = "";
+	private String lastQueriedTxnId = "";
+	private String lastTxnIdResonse = "";
+	
+	public Gateway pgateway = null;
+	Gateway.Builder builder = Gateway.createBuilder();
+	
+	private static final long WAIT = 5000L;
+	
+	@Resource
+    private TimerService timerService;
+    private Timer timer;
+     
+    @PostConstruct
+    public void init() {
+        TimerConfig config = new TimerConfig();
+        config.setPersistent(false);
+        
+        try {
+			Path walletPath = Paths.get(pathRoot + "org-2-wallet");
+			Wallet wallet = Wallet.createFileSystemWallet(walletPath);
+			
+			//load a CCP
+			//expecting the connect profile json file; export the Connection Profile from the
+			//fabric gateway and add to the default server location 
+			Path networkConfigPath = Paths.get(pathRoot + "2-Org-Local-Fabric-Org1_connection.json");
+			//System.out.println("NetworkConfigPath");
+		
+			//expecting wallet directory within the default server location
+			//wallet exported from Fabric wallets Org 1
+			builder.identity(wallet, "org2Admin").networkConfig(networkConfigPath).discovery(true);
+			
+			pgateway = builder.connect();
+			Network network = pgateway.getNetwork("mychannel");
+			
+            blockListener = network.addBlockListener(blockEvents::add);
+            System.out.println("Blocklistener");
+		} 
+		catch (Exception e2) 
+		{
+			System.out.println("Failed to build identity"); 
+			System.out.println(e2.getMessage());
+		}	
+        timer = timerService.createIntervalTimer(WAIT, WAIT, config);
+    }
+
+    @Timeout
+    private synchronized void onTimer() {
+    	try {
+    		BlockEvent ev = getBlockEvent();
+    		System.out.println( "Number of transaction from block event " + ev.getTransactionCount());
+        
+        	for (TransactionEvent te : ev.getTransactionEvents()) {	
+        		lastTxnId = te.getTransactionID();
+        		System.out.println( "Transaction id is  " + lastTxnId);
+        	}
+        	blockEvents.clear();	
+    	}
+    	catch (Exception e)
+    	{
+    		//normal timeout will cause this exception if there isn't anything
+    	}
+    }
+    
+    public EventListener(){
+    }
+    
+    @Lock(LockType.READ)
+	public String getLastTransactionId() {
+    	if (lastTxnId.length() == 0) {lastTxnId = "None";}
+		return lastTxnId;
+	}
+	
+    @Lock(LockType.WRITE)
+    public void setLastQueriedId(String txnId) {
+    	lastQueriedTxnId = txnId;
+    }
+    
+    @Lock(LockType.READ)
+    public String getLastQueriedId() {
+    	return lastQueriedTxnId;
+    }
+    
+    @Lock(LockType.WRITE)
+    public void setLastTxnIdResponse(String lastResponse) {
+    	lastTxnIdResonse = lastResponse;
+    }
+    
+    @Lock(LockType.READ)
+    public String getLastTxnIdResponse() {
+    	return lastTxnIdResonse;
+    }
+    
+	private BlockEvent getBlockEvent() throws InterruptedException {
+			BlockEvent event =null;
+			event = blockEvents.poll();		
+			return event;
+    }
+}
+

@@ -1,0 +1,41 @@
+package sample.hyperledger.blockchain.communication;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(urlPatterns="/servlet")
+public class EventNotificationServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        response.getWriter().append(getHTMLResponseString());
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        doGet(request, response);
+    }
+    
+    private String getHTMLResponseString()
+    {	
+    	StringBuilder sb = new StringBuilder("<!DOCTYPE html>");
+    	sb.append("<html>");
+    	sb.append("<body>");
+    	sb.append("<h2>Use JavaScript to Change Text</h2>");
+    	sb.append("<p>This example writes Hello JavaScript into an HTML element with id=\"demo\":</p>");
+    	sb.append("<p id=\"demo\"></p>");
+    	sb.append("<script>");
+    	sb.append("document.getElementById(\"demo\").innerHTML = \"Hello JavaScript!\"");
+    	sb.append("</script> ");
+    	sb.append("</body>");
+    	sb.append("</html>");
+    	return sb.toString();
+    }
+
+}
