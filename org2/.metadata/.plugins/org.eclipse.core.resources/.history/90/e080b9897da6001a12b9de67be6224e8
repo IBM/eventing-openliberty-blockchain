@@ -1,5 +1,0 @@
-package sample.hyperledger.blockchain.communication;
-
-public class EventNotificationServlet {
-
-}

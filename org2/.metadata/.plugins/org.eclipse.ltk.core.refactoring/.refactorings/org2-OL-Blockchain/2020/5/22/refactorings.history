@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring accessors="true" comment="Delete element from project &apos;org2-OL-Blockchain&apos;&#x0A;- Original project: &apos;org2-OL-Blockchain&apos;&#x0A;- Original element: &apos;org-2-ol-blockchain.war&apos;" description="Delete element" element1="target/org-2-ol-blockchain.war" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1590756411496" subPackages="false" version="1.0"/>
-</session>
