@@ -314,7 +314,7 @@ The following diagram illustrates how Open Liberty is listening to events from H
 
 1. The seller submits a transaction, and the Java microservice processes the car and adds it to the blockchain network.
 
-   The vehicle can be queried by any organization, as demonstrated in [Step 8](#7-query-all-ledger-state-as-a-buyer) of the tutorial instructions.
+   The vehicle can be queried by any organization, as demonstrated in [Step 8](#8-query-all-ledger-state-as-a-buyer) of the tutorial instructions.
 
 1. When the buyer or seller submits a transaction to the Ledger, an event is emitted from Hyperledger Fabric. Organization 1 does not have the configuration to listen for the said event as the seller is not interested in being notified of the event.
 
